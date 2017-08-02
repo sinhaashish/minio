@@ -89,6 +89,7 @@ func registerWebRouter(mux *router.Router) error {
 	// be logged, so a new one must be generated for each request.
 	webBrowserRouter.Methods("GET").Path("/download/{bucket}/{object:.+}").Queries("token", "{token:.*}").HandlerFunc(web.Download)
 	webBrowserRouter.Methods("POST").Path("/zip").Queries("token", "{token:.*}").HandlerFunc(web.DownloadZip)
+	webBrowserRouter.Methods("GET").Path("/thumbnail/{bucket}/{object:.+}").HandlerFunc(web.Thumbnail)
 
 	// Add compression for assets.
 	h := http.FileServer(assetFS())
