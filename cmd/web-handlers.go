@@ -163,7 +163,9 @@ func (web *webAPIHandlers) DeleteBucket(r *http.Request, args *RemoveBucketArgs,
 	}
 
 	bucketLock := globalNSMutex.NewNSLock(args.BucketName, "")
-	bucketLock.Lock()
+	if err := bucketLock.GetLock(globalObjectTimeout); err != nil {
+		return toJSONError(errOperationTimedOut)
+	}
 	defer bucketLock.Unlock()
 
 	err := objectAPI.DeleteBucket(args.BucketName)
@@ -746,13 +748,17 @@ func (web *webAPIHandlers) Thumbnail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Lock the object before reading.
+	// Lock the object before reading.
 	objectLock := globalNSMutex.NewNSLock(bucket, object)
-	objectLock.RLock()
+	if objectLock.GetRLock(globalObjectTimeout) != nil {
+		writeWebErrorResponse(w, errOperationTimedOut)
+		return
+	}
 	defer objectLock.RUnlock()
 
 	options := thumbnail.Options{
 		Dimensions: "300x100",
-		Format:     "jpg",
+		Format:     "jpeg",
 	}
 
 	buffer := new(bytes.Buffer)
