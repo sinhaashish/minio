@@ -118,6 +118,7 @@ ENVIRONMENT VARIABLES:
      MINIO_CACHE_DRIVES: List of mounted drives or directories delimited by ";".
      MINIO_CACHE_EXCLUDE: List of cache exclusion patterns delimited by ";".
      MINIO_CACHE_EXPIRY: Cache expiry duration in days.
+     MINIO_CACHE_MAXUSE: Maximum permitted usage of the cache in percentage (0-100).
 
   GCS credentials file:
      GOOGLE_APPLICATION_CREDENTIALS: Path to credentials.json
@@ -137,6 +138,7 @@ EXAMPLES:
      $ export MINIO_CACHE_DRIVES="/mnt/drive1;/mnt/drive2;/mnt/drive3;/mnt/drive4"
      $ export MINIO_CACHE_EXCLUDE="bucket1/*;*.png"
      $ export MINIO_CACHE_EXPIRY=40
+     $ export MINIO_CACHE_MAXUSE=80
      $ {{.HelpName}} mygcsprojectid
 `
 
@@ -1134,7 +1136,6 @@ func (l *gcsGateway) CompleteMultipartUpload(ctx context.Context, bucket string,
 func (l *gcsGateway) SetBucketPolicy(ctx context.Context, bucket string, bucketPolicy *policy.Policy) error {
 	policyInfo, err := minio.PolicyToBucketAccessPolicy(bucketPolicy)
 	if err != nil {
-		// This should not happen.
 		logger.LogIf(ctx, err)
 		return gcsToObjectError(err, bucket)
 	}
@@ -1190,7 +1191,6 @@ func (l *gcsGateway) SetBucketPolicy(ctx context.Context, bucket string, bucketP
 func (l *gcsGateway) GetBucketPolicy(ctx context.Context, bucket string) (*policy.Policy, error) {
 	rules, err := l.client.Bucket(bucket).ACL().List(l.ctx)
 	if err != nil {
-		logger.LogIf(ctx, err)
 		return nil, gcsToObjectError(err, bucket)
 	}
 
@@ -1225,7 +1225,6 @@ func (l *gcsGateway) GetBucketPolicy(ctx context.Context, bucket string) (*polic
 
 	// Return NoSuchBucketPolicy error, when policy is not set
 	if len(actionSet) == 0 {
-		logger.LogIf(ctx, minio.BucketPolicyNotFound{})
 		return nil, gcsToObjectError(minio.BucketPolicyNotFound{}, bucket)
 	}
 
@@ -1250,7 +1249,6 @@ func (l *gcsGateway) GetBucketPolicy(ctx context.Context, bucket string) (*polic
 func (l *gcsGateway) DeleteBucketPolicy(ctx context.Context, bucket string) error {
 	// This only removes the storage.AllUsers policies
 	if err := l.client.Bucket(bucket).ACL().Delete(l.ctx, storage.AllUsers); err != nil {
-		logger.LogIf(ctx, err)
 		return gcsToObjectError(err, bucket)
 	}
 
