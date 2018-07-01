@@ -37,7 +37,53 @@ docker_secrets_env() {
     fi
 }
 
+# switch to non root (minio) user if there isn't an existing .minio.sys directory or
+# if its an empty data directory. We dont switch to minio user if there is an existing
+# data directory, this is because we'll need to chown all the files -- which may take 
+# too long, ruining the user's experience.
+docker_switch_non_root() {
+    for var in "$@"
+    do
+    echo " var $var"
+     if [ "${var}" = "minio" ]; then
+     continue
+     fi
+     if [ "${var}" = "gateway" ]; then
+     owner="minio"
+     continue
+     fi    
+     if [ "${var}" = "server" ]; then
+     continue
+     fi
+
+    if [ -d "${var}" ]; then
+            if [ -d "${var}/.minio.sys" ]; then
+                owner=$(ls -ld "${var}/.minio.sys" | awk '{print $3}')       
+            else
+                # if the directory doesn't exist, this is a new deployment.
+                mkdir -p "${var}"
+                # change owner to minio user
+                chown minio:minio "${var}"
+                owner="minio"    
+            fi
+         break   
+    fi
+    done
+
+    if [ "${owner}" = "minio"  ]; then
+        # run as minio user
+        exec su-exec $owner "$@"        
+    elif [ "${owner}" = "root"  ]; then
+        # else run as root user 
+        exec "$@"
+     else 
+        echo " Exiting as user is not root or minio "
+        exit 1
+    fi
+}
+
 ## Set access env from secrets if necessary.
 docker_secrets_env
 
-exec "$@"
+## Switch to non root user minio if applicable.
+docker_switch_non_root "$@"

@@ -15,6 +15,13 @@ COPY dockerscripts/docker-entrypoint.sh dockerscripts/healthcheck.sh /usr/bin/
 
 COPY . /go/src/github.com/minio/minio
 
+# add our user and group first with fixed uid and gid, this ensures
+# multiple updates to the minio image dont have permission issues.
+RUN addgroup -g 190 -S minio && adduser -u 190 -S -G minio minio
+
+# grab su-exec for easy step-down from root
+RUN apk add --no-cache 'su-exec>=0.2'
+
 RUN  \
      apk add --no-cache ca-certificates curl && \
      apk add --no-cache --virtual .build-deps git && \
