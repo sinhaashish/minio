@@ -130,6 +130,7 @@ func matchesMyWhereClause(row []string, columnNames map[string]int, alias string
 			// Subtract 1 out because the index starts at 1 for Amazon instead of 0.
 			return evaluateOperator(row[intCol-1], operator, operand)
 		}
+
 		if myVal != "" {
 			return evaluateOperator(myVal, operator, operand)
 		}
@@ -171,6 +172,11 @@ func matchesMyWhereClause(row []string, columnNames map[string]int, alias string
 	}
 	return true, nil
 }
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     PARSE SELECT FOR JSON STARTS  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+
 func applyStrFunc(rawArg string, funcName string) string {
 	switch strings.ToUpper(funcName) {
 	case "TRIM":
@@ -626,6 +632,73 @@ func (reader *Input) whereClauseNameErrs(whereClause interface{}, alias string) 
 	return nil
 }
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     PARSE SELECT FOR JSON STARTS  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+
+// parseErrs is the function which handles all the errors that could occur
+// through use of function arguments such as column names in NULLIF
+// whereClauseNameErrs is a function which returns an error if there is a column
+// in the where clause which does not exist.
+func (reader *JSONInput) whereClauseNameErrs(whereClause interface{}, alias string) error {
+	var conversionColumn string
+	switch expr := whereClause.(type) {
+	// case for checking errors within a clause of the form "col_name is ..."
+	case *sqlparser.IsExpr:
+		switch myCol := expr.Expr.(type) {
+		case *sqlparser.FuncExpr:
+			if err := reader.evaluateFuncErr(myCol); err != nil {
+				return err
+			}
+		case *sqlparser.ColName:
+			conversionColumn = cleanCol(myCol.Name.CompliantName(), alias)
+		}
+	case *sqlparser.RangeCond:
+		switch left := expr.Left.(type) {
+		case *sqlparser.FuncExpr:
+			if err := reader.evaluateFuncErr(left); err != nil {
+				return err
+			}
+		case *sqlparser.ColName:
+			conversionColumn = cleanCol(left.Name.CompliantName(), alias)
+		}
+	case *sqlparser.ComparisonExpr:
+		switch left := expr.Left.(type) {
+		case *sqlparser.FuncExpr:
+			if err := reader.evaluateFuncErr(left); err != nil {
+				return err
+			}
+		case *sqlparser.ColName:
+			conversionColumn = cleanCol(left.Name.CompliantName(), alias)
+		}
+	case *sqlparser.AndExpr:
+		switch left := expr.Left.(type) {
+		case *sqlparser.ComparisonExpr:
+			return reader.whereClauseNameErrs(left, alias)
+		}
+		switch right := expr.Right.(type) {
+		case *sqlparser.ComparisonExpr:
+			return reader.whereClauseNameErrs(right, alias)
+		}
+	case *sqlparser.OrExpr:
+		switch left := expr.Left.(type) {
+		case *sqlparser.ComparisonExpr:
+			return reader.whereClauseNameErrs(left, alias)
+		}
+		switch right := expr.Right.(type) {
+		case *sqlparser.ComparisonExpr:
+			return reader.whereClauseNameErrs(right, alias)
+		}
+	}
+	if conversionColumn != "" {
+		return reader.colNameErrs([]string{conversionColumn})
+	}
+	return nil
+}
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     PARSE SELECT FOR JSON ENDS    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+
 // qualityCheck ensures the row has enough separators.
 func qualityCheck(row string, amountOfSep int, sep string) string {
 	for i := 0; i < amountOfSep; i++ {
@@ -671,6 +744,30 @@ func (reader *Input) colNameErrs(columnNames []string) error {
 				return ErrMissingHeaders
 			}
 		}
+	}
+	return nil
+}
+
+// parseErrs is the function which handles all the errors that could occur
+// through use of function arguments such as column names in NULLIF
+func (reader *JSONInput) colNameErrs(columnNames []string) error {
+	for i := 0; i < len(columnNames); i++ {
+		// if columnNames[i] == "" {
+		// 	continue
+		// }
+		// if !representsInt(columnNames[i]) && !reader.options.HeaderOpt {
+		// 	return ErrInvalidColumnIndex
+		// }
+		// if representsInt(columnNames[i]) {
+		// 	tempInt, _ := strconv.Atoi(columnNames[i])
+		// 	if tempInt > len(reader.Header()) || tempInt == 0 {
+		// 		return ErrInvalidColumnIndex
+		// 	}
+		// } else {
+		// 	if reader.options.HeaderOpt && !stringInSlice(columnNames[i], reader.Header()) {
+		// 		return ErrMissingHeaders
+		// 	}
+		// }
 	}
 	return nil
 }
@@ -731,6 +828,34 @@ func evaluateParserType(col *sqlparser.SQLVal) (interface{}, error) {
 // parseErrs is the function which handles all the errors that could occur
 // through use of function arguments such as column names in NULLIF
 func (reader *Input) parseErrs(columnNames []string, whereClause interface{}, alias string, myFuncs *SelectFuncs) error {
+	// Below code cleans up column names.
+	reader.processColumnNames(columnNames, alias)
+	if columnNames[0] != "*" {
+		if err := reader.colNameErrs(columnNames); err != nil {
+			return err
+		}
+	}
+	// Below code ensures the whereClause has no errors.
+	if whereClause != nil {
+		tempClause := whereClause
+		if err := reader.whereClauseNameErrs(tempClause, alias); err != nil {
+			return err
+		}
+	}
+	for i := 0; i < len(myFuncs.funcExpr); i++ {
+		if myFuncs.funcExpr[i] == nil {
+			continue
+		}
+		if err := reader.evaluateFuncErr(myFuncs.funcExpr[i]); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// parseErrs is the function which handles all the errors that could occur
+// through use of function arguments such as column names in NULLIF
+func (reader *JSONInput) parseErrs(columnNames []string, whereClause interface{}, alias string, myFuncs *SelectFuncs) error {
 	// Below code cleans up column names.
 	reader.processColumnNames(columnNames, alias)
 	if columnNames[0] != "*" {

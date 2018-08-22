@@ -28,6 +28,8 @@ import (
 
 	"net/http"
 
+	jsoniter "github.com/json-iterator/go"
+
 	gzip "github.com/klauspost/pgzip"
 )
 
@@ -74,6 +76,24 @@ type Input struct {
 	stats           *statInfo
 }
 
+// JsonInput represents a record producing input from a  formatted file or pipe.
+type JSONInput struct {
+	options         *JSONOptions
+	reader          *jsoniter.Decoder
+	firstRow        []string
+	header          []string
+	minOutputLength int
+	stats           *statInfo
+}
+
+type SelectQuery interface {
+	Execute(writer io.Writer) error
+	runSelectParser(selectExpression string, myRow chan *Row)
+	processSelectReq(reqColNames []string, alias string, whereClause interface{}, limitOfRecords int64, functionNames []string, myRow chan *Row, myFunc *SelectFuncs)
+	ParseSelect(sqlInput string) ([]string, string, int64, interface{}, []string, *SelectFuncs, error)
+	//writeRecordMessage(payload string, currentMessage *bytes.Buffer) *bytes.Buffer
+}
+
 // Options options are passed to the underlying encoding/csv reader.
 type Options struct {
 	// HasHeader when true, will treat the first row as a header row.
@@ -107,6 +127,33 @@ type Options struct {
 
 	// Whether Header is "USE" or another
 	HeaderOpt bool
+}
+
+// JSONOptions options are passed to the underlying encoding/json reader.
+type JSONOptions struct {
+
+	// Name of the table that is used for querying
+	Name string
+
+	// ReadFrom is where the data will be read from.
+	//ReadFrom io.Reader
+	ReadFrom io.Reader
+
+	// If true then we need to add gzip or bzip reader.
+	// to extract the csv.
+	Compressed string
+
+	// SQL expression meant to be evaluated.
+	Expression string
+
+	// What the outputted CSV will be delimited by .
+	//OutputFieldDelimiter string
+
+	// Size of incoming object
+	StreamSize int64
+
+	//To be implemented
+	//Typej JSONType
 }
 
 // NewInput sets up a new Input, the first row is read when this is run.
@@ -154,6 +201,29 @@ func NewInput(opts *Options) (*Input, error) {
 
 	if err := reader.readHeader(); err != nil {
 		return nil, err
+	}
+
+	return reader, nil
+}
+
+// NewInputJson sets up a new Input, the first Json is read when this is run.
+// If there is a problem with reading the first Json, the error is returned.
+// Otherwise, the returned reader can be reliably consumed with ReadRecord()
+// until ReadRecord() returns nil.
+func NewJsonInput(opts1 *JSONOptions) (*JSONInput, error) {
+
+	myReader := opts1.ReadFrom
+	var tempBytesScanned int64
+	progress := &statInfo{
+		BytesScanned:   tempBytesScanned,
+		BytesProcessed: 0,
+		BytesReturned:  0,
+	}
+
+	reader := &JSONInput{
+		options: opts1,
+		reader:  jsoniter.NewDecoder(myReader),
+		stats:   progress,
 	}
 
 	return reader, nil
@@ -245,11 +315,47 @@ func (reader *Input) createStatXML() (string, error) {
 	return xml.Header + string(out), nil
 }
 
+func (reader *JSONInput) createStatXML() (string, error) {
+	if reader.options.Compressed == "NONE" {
+		reader.stats.BytesProcessed = reader.options.StreamSize
+		reader.stats.BytesScanned = reader.stats.BytesProcessed
+	}
+	statXML := stats{
+		BytesScanned:   reader.stats.BytesScanned,
+		BytesProcessed: reader.stats.BytesProcessed,
+		BytesReturned:  reader.stats.BytesReturned,
+		Xmlns:          "",
+	}
+	out, err := xml.Marshal(statXML)
+	if err != nil {
+		return "", err
+	}
+	return xml.Header + string(out), nil
+}
+
 // createProgressXML is the function which does the marshaling from the progress structs into XML so that the progress and stat message can be sent
 func (reader *Input) createProgressXML() (string, error) {
 	if reader.options.HasHeader {
 		reader.stats.BytesProcessed += processSize(reader.header)
 	}
+	if !(reader.options.Compressed != "NONE") {
+		reader.stats.BytesScanned = reader.stats.BytesProcessed
+	}
+	progressXML := &progress{
+		BytesScanned:   reader.stats.BytesScanned,
+		BytesProcessed: reader.stats.BytesProcessed,
+		BytesReturned:  reader.stats.BytesReturned,
+		Xmlns:          "",
+	}
+	out, err := xml.Marshal(progressXML)
+	if err != nil {
+		return "", err
+	}
+	return xml.Header + string(out), nil
+}
+
+func (reader *JSONInput) createProgressXML() (string, error) {
+
 	if !(reader.options.Compressed != "NONE") {
 		reader.stats.BytesScanned = reader.stats.BytesProcessed
 	}
@@ -294,7 +400,7 @@ func (reader *Input) Execute(writer io.Writer) error {
 		select {
 		case row, ok := <-myRow:
 			if ok && row.err != nil {
-				errorMessage := reader.writeErrorMessage(row.err, curBuf)
+				errorMessage := writeErrorMessage(row.err, curBuf)
 				_, err := errorMessage.WriteTo(writer)
 				flusher, okFlush := writer.(http.Flusher)
 				if okFlush {
@@ -307,7 +413,7 @@ func (reader *Input) Execute(writer io.Writer) error {
 				close(myRow)
 				return nil
 			} else if ok {
-				message := reader.writeRecordMessage(row.record, curBuf)
+				message := writeRecordMessage(row.record, curBuf)
 				_, err := message.WriteTo(writer)
 				flusher, okFlush := writer.(http.Flusher)
 				if okFlush {
@@ -322,6 +428,7 @@ func (reader *Input) Execute(writer io.Writer) error {
 					<-continuationTimer.C
 				}
 				continuationTimer.Reset(continuationTime)
+
 			} else if !ok {
 				statPayload, err := reader.createStatXML()
 				if err != nil {
@@ -378,4 +485,95 @@ func (reader *Input) Execute(writer io.Writer) error {
 			continuationTimer.Reset(continuationTime)
 		}
 	}
+}
+
+// Execute is the function where all the blocking occurs, It writes to the HTTP
+// response writer in a streaming fashion so that the client can actively use
+// the results before the query is finally finished executing. The
+func (reader *JSONInput) Execute(writer io.Writer) error {
+	myRow := make(chan *Row)
+	curBuf := bytes.NewBuffer(make([]byte, 1000000))
+	curBuf.Reset()
+	progressTicker := time.NewTicker(progressTime)
+	continuationTimer := time.NewTimer(continuationTime)
+	defer progressTicker.Stop()
+	defer continuationTimer.Stop()
+	go reader.runSelectParser(convertMySQL(reader.options.Expression), myRow)
+
+	for {
+		select {
+		case row, ok := <-myRow:
+			if ok && row.err != nil {
+				errorMessage := writeErrorMessage(row.err, curBuf)
+				_, err := errorMessage.WriteTo(writer)
+				flusher, okFlush := writer.(http.Flusher)
+				if okFlush {
+					flusher.Flush()
+				}
+				if err != nil {
+					return err
+				}
+				curBuf.Reset()
+				close(myRow)
+				return nil
+			} else if ok {
+				message := writeRecordMessage(row.record, curBuf)
+				_, err := message.WriteTo(writer)
+				flusher, okFlush := writer.(http.Flusher)
+				if okFlush {
+					flusher.Flush()
+				}
+				if err != nil {
+					return err
+				}
+				curBuf.Reset()
+				reader.stats.BytesReturned += int64(len(row.record))
+				if !continuationTimer.Stop() {
+					<-continuationTimer.C
+				}
+				continuationTimer.Reset(continuationTime)
+
+			} else if !ok {
+				statPayload, err := reader.createStatXML()
+				if err != nil {
+					return err
+				}
+				statMessage := reader.writeStatMessage(statPayload, curBuf)
+				_, err = statMessage.WriteTo(writer)
+				flusher, ok := writer.(http.Flusher)
+				if ok {
+					flusher.Flush()
+				}
+				if err != nil {
+					return err
+				}
+				curBuf.Reset()
+				message := reader.writeEndMessage(curBuf)
+				_, err = message.WriteTo(writer)
+				flusher, ok = writer.(http.Flusher)
+				if ok {
+					flusher.Flush()
+				}
+				if err != nil {
+					return err
+				}
+				return nil
+			}
+		case <-continuationTimer.C:
+			message := reader.writeContinuationMessage(curBuf)
+			_, err := message.WriteTo(writer)
+			flusher, ok := writer.(http.Flusher)
+			if ok {
+				flusher.Flush()
+			}
+			if err != nil {
+				return err
+			}
+			curBuf.Reset()
+			continuationTimer.Reset(continuationTime)
+
+		}
+	}
+
+	return nil
 }

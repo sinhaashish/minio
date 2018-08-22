@@ -282,7 +282,7 @@ func writeProgressHeader() []byte {
 
 // writeRecordMessage is the function which constructs the binary message for a
 // record message to be sent.
-func (csvOutput *Input) writeRecordMessage(payload string, currentMessage *bytes.Buffer) *bytes.Buffer {
+func writeRecordMessage(payload string, currentMessage *bytes.Buffer) *bytes.Buffer {
 	// The below are the specifications of the header for a "record" event
 	// 11 -event type - 7 - 7 "Records"
 	// 13 -content-type -7 -24 "application/octet-stream"
@@ -331,6 +331,27 @@ func (csvOutput *Input) writeContinuationMessage(currentMessage *bytes.Buffer) *
 
 }
 
+func (Output *JSONInput) writeContinuationMessage(currentMessage *bytes.Buffer) *bytes.Buffer {
+	// 11 -event type - 7 - 4 "Cont"
+	// 13 -message-type -7 5 "event"
+	// This is predefined from AMZ protocol found here:
+	// https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html
+	headerLen := len(contHeaders)
+	currentMessage.Write(writePayloadSize(0, headerLen))
+
+	currentMessage.Write(writeHeaderSize(headerLen))
+
+	// Calculate the Prelude CRC here:
+	currentMessage.Write(writeCRC(currentMessage.Bytes()))
+
+	currentMessage.Write(contHeaders)
+
+	//Now we do a CRC check on the entire messages
+	currentMessage.Write(writeCRC(currentMessage.Bytes()))
+	return currentMessage
+
+}
+
 // writeEndMessage is the function which constructs the binary message
 // for a end message to be sent.
 func (csvOutput *Input) writeEndMessage(currentMessage *bytes.Buffer) *bytes.Buffer {
@@ -354,9 +375,56 @@ func (csvOutput *Input) writeEndMessage(currentMessage *bytes.Buffer) *bytes.Buf
 
 }
 
+func (csvOutput *JSONInput) writeEndMessage(currentMessage *bytes.Buffer) *bytes.Buffer {
+	// 11 -event type - 7 - 3 "End"
+	// 13 -message-type -7 5 "event"
+	// This is predefined from AMZ protocol found here:
+	// https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html
+	headerLen := len(endHeaders)
+	currentMessage.Write(writePayloadSize(0, headerLen))
+
+	currentMessage.Write(writeHeaderSize(headerLen))
+
+	//Calculate the Prelude CRC here:
+	currentMessage.Write(writeCRC(currentMessage.Bytes()))
+
+	currentMessage.Write(endHeaders)
+
+	// Now we do a CRC check on the entire messages
+	currentMessage.Write(writeCRC(currentMessage.Bytes()))
+	return currentMessage
+
+}
+
 // writeStateMessage is the function which constructs the binary message for a
 // state message to be sent.
 func (csvOutput *Input) writeStatMessage(payload string, currentMessage *bytes.Buffer) *bytes.Buffer {
+	// 11 -event type - 7 - 5 "Stat" 20
+	// 13 -content-type -7 -8 "text/xml" 25
+	// 13 -message-type -7 5 "event"     22
+	// This is predefined from AMZ protocol found here:
+	// https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html
+	headerLen := len(statHeaders)
+
+	currentMessage.Write(writePayloadSize(len(payload), headerLen))
+
+	currentMessage.Write(writeHeaderSize(headerLen))
+
+	currentMessage.Write(writeCRC(currentMessage.Bytes()))
+
+	currentMessage.Write(statHeaders)
+
+	// This part is where the payload is written, this will be only one row, since
+	// we're sending one message at a types
+	currentMessage.Write(writePayload(payload))
+
+	// Now we do a CRC check on the entire messages
+	currentMessage.Write(writeCRC(currentMessage.Bytes()))
+	return currentMessage
+
+}
+
+func (csvOutput *JSONInput) writeStatMessage(payload string, currentMessage *bytes.Buffer) *bytes.Buffer {
 	// 11 -event type - 7 - 5 "Stat" 20
 	// 13 -content-type -7 -8 "text/xml" 25
 	// 13 -message-type -7 5 "event"     22
@@ -413,7 +481,7 @@ func (csvOutput *Input) writeProgressMessage(payload string, currentMessage *byt
 
 // writeErrorMessage is the function which constructs the binary message for a
 // error message to be sent.
-func (csvOutput *Input) writeErrorMessage(errorMessage error, currentMessage *bytes.Buffer) *bytes.Buffer {
+func writeErrorMessage(errorMessage error, currentMessage *bytes.Buffer) *bytes.Buffer {
 
 	// The below are the specifications of the header for a "error" event
 	// 11 -error-code - 7 - DEFINED "DEFINED"

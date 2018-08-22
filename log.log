@@ -1,0 +1,911 @@
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153379624.254063] [2018-08-09 12:00:42 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+X-Amz-Date: 20180809T063042Z
+Amz-Sdk-Invocation-Id: 379ea58c-07aa-9144-150a-30a7da08e3ca
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+Content-Length: 292
+Connection: Keep-Alive
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180809/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=feec687d627ed3eeb45ab3f72bb8abb0e2ce9aa58946396dce95cb3fa72c4b70
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+
+<BODY>
+
+[RESPONSE] [153379624.254063] [2018-08-09 12:00:42 +0530]
+200 OK
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 1549238E62758B19
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153379657.615410] [2018-08-09 12:06:16 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+Amz-Sdk-Invocation-Id: 3187d4e9-6a0b-86fd-3166-0f9ce2b208c9
+Connection: Keep-Alive
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180809/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=b654174e9db7c703859543851f96b76516892d8e248e0d476cdf7b4b446377ac
+X-Amz-Date: 20180809T063616Z
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+Content-Length: 292
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+
+<BODY>
+
+[RESPONSE] [153379657.615410] [2018-08-09 12:06:16 +0530]
+200 OK
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 154923DC0F5DBFB4
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153379842.223978] [2018-08-09 12:37:02 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Amz-Sdk-Invocation-Id: cf81c451-f40b-40fd-95c5-4b5ca492e2f2
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Connection: Keep-Alive
+Content-Length: 296
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180809/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=cee1da7e72ded762287c252f6d17bff704bae9f254e1cb02f0a292df997960c1
+X-Amz-Date: 20180809T070702Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+
+<BODY>
+
+[RESPONSE] [153379842.223978] [2018-08-09 12:37:02 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153379879.384830] [2018-08-09 12:43:13 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+X-Amz-Date: 20180809T071313Z
+Amz-Sdk-Invocation-Id: 875b7597-be7c-af98-78a8-a22c8f6080af
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Length: 292
+Connection: Keep-Alive
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180809/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=f1d8bc1814e6c134f223d6b425166d1197572a268154fa521d8df77254cca04a
+Amz-Sdk-Retry: 0/0/500
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+
+<BODY>
+
+[RESPONSE] [153379879.384830] [2018-08-09 12:43:13 +0530]
+200 OK
+X-Amz-Request-Id: 154925E0683F601A
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153380081.746357] [2018-08-09 13:16:57 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Content-Length: 296
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180809/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=da3b3fe6002e597c5417c9964fdabf20170a44c9a1d06336796676f03213c4eb
+X-Amz-Date: 20180809T074657Z
+Amz-Sdk-Invocation-Id: 78938d7d-bb5c-59f4-2eac-e432b97256b9
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Connection: Keep-Alive
+
+<BODY>
+
+[RESPONSE] [153380081.746357] [2018-08-09 13:16:57 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153380568.925020] [2018-08-09 14:38:09 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+X-Amz-Date: 20180809T090809Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+Connection: Keep-Alive
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180809/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=7996381af91ace8ca3c4c852e57cd75a7a08aa2cde8314e75817ed1b4c754877
+Amz-Sdk-Invocation-Id: 1cf9477d-f6d6-c9d7-fd4c-0d20b90ef8a4
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+Content-Length: 292
+
+<BODY>
+
+[RESPONSE] [153380568.925020] [2018-08-09 14:38:09 +0530]
+200 OK
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 15492C25DE39507A
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153380887.197593] [2018-08-09 15:31:11 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+X-Amz-Date: 20180809T100111Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Invocation-Id: bca66910-a2ee-0d95-3d1f-b89a76837ef8
+Amz-Sdk-Retry: 0/0/500
+Content-Length: 292
+Connection: Keep-Alive
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180809/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=11e304d4d97a0d27dbaa9fe6cc38089293e94d42070c8e8ed294382d922f86b6
+Content-Type: application/xml; charset=ISO-8859-1
+
+<BODY>
+
+[RESPONSE] [153380887.197593] [2018-08-09 15:31:12 +0530]
+200 OK
+X-Amz-Request-Id: 15492F0AE77218DA
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153381201.141679] [2018-08-09 16:23:31 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+X-Amz-Date: 20180809T105331Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180809/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=2785a4af63e5aff847c8da50679daed85f5fbbc6fe8ef72c8bd4efbbe2ac51a9
+Amz-Sdk-Invocation-Id: ed89b96c-2234-71d8-b002-591347450a5d
+Content-Length: 296
+Connection: Keep-Alive
+
+<BODY>
+
+[RESPONSE] [153381201.141679] [2018-08-09 16:23:31 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153389345.005750] [2018-08-10 15:00:50 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=edc4dad3c9f648b5c65dc33376f70a1281a363c8a9f5cc7bf53d710369ea54ff
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Invocation-Id: 90813547-30f9-2384-c2be-5087a740ed71
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Length: 292
+X-Amz-Date: 20180810T093049Z
+Amz-Sdk-Retry: 0/0/500
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+Connection: Keep-Alive
+
+<BODY>
+
+[RESPONSE] [153389345.005750] [2018-08-10 15:00:50 +0530]
+200 OK
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 15497BF745F62AE5
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153389345.436712] [2018-08-10 15:00:54 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Invocation-Id: 823b3c49-92a2-5315-a67b-c8a465fc8476
+Content-Length: 292
+Connection: Keep-Alive
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=195e18cb77322a39a706f05bbd956ffd872b605e2fbd71095dad866f2308b7d4
+X-Amz-Date: 20180810T093054Z
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+
+<BODY>
+
+[RESPONSE] [153389345.436712] [2018-08-10 15:00:54 +0530]
+200 OK
+X-Amz-Request-Id: 15497BF846D85EE3
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153389571.333243] [2018-08-10 15:38:33 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=0ab8bb4dc8dfd2ae4d9f3eb79c418dd14daa4a8144a054acc09b86acc6c540f6
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Invocation-Id: b6003516-d6c6-1ec2-12c9-523802e89091
+Connection: Keep-Alive
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+X-Amz-Date: 20180810T100833Z
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+Content-Length: 292
+
+<BODY>
+
+[RESPONSE] [153389571.333243] [2018-08-10 15:38:33 +0530]
+200 OK
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 15497E063BAAB011
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153389590.764849] [2018-08-10 15:41:47 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=992504529ff48fc9b4ca837e0a1096df07f1c9fb79bb6197821e75d026085000
+X-Amz-Date: 20180810T101147Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+Connection: Keep-Alive
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+Amz-Sdk-Invocation-Id: f93d6c96-1da2-08ca-6b3d-01481e6ed442
+Amz-Sdk-Retry: 0/0/500
+Content-Length: 292
+
+<BODY>
+
+[RESPONSE] [153389590.764849] [2018-08-10 15:41:47 +0530]
+200 OK
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 15497E3379CEA68D
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153389621.809462] [2018-08-10 15:46:58 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=03bc5e13d4ae7460c9c028ecc6b0fec18648cf4dc67bdaf4b0e78177df65c493
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+Content-Length: 292
+Connection: Keep-Alive
+X-Amz-Date: 20180810T101657Z
+Amz-Sdk-Invocation-Id: 06abba6f-5e86-f94b-f097-fd748245422b
+Content-Type: application/xml; charset=ISO-8859-1
+
+<BODY>
+
+[RESPONSE] [153389621.809462] [2018-08-10 15:46:58 +0530]
+200 OK
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 15497E7BC1D69E62
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153389631.696361] [2018-08-10 15:48:36 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=c5e72ffb03707738118dc384a02ed05be9df7aaa840f709fcbe52308c3a2e601
+X-Amz-Date: 20180810T101836Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Invocation-Id: e2537995-c56a-0325-72f2-6ea7d91b3d4b
+Amz-Sdk-Retry: 0/0/500
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+Connection: Keep-Alive
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Length: 292
+
+<BODY>
+
+[RESPONSE] [153389631.696361] [2018-08-10 15:48:36 +0530]
+200 OK
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 15497E92C6E3C58A
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153389835.482085] [2018-08-10 16:22:34 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=547f56b192a781fa16ea0d93c5b5278b5c02c8f303601c25c760e2c951eb8061
+X-Amz-Date: 20180810T105234Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Invocation-Id: f7ca62b4-3569-5ef5-5f03-8a330d6ce085
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Content-Length: 296
+Connection: Keep-Alive
+
+<BODY>
+
+[RESPONSE] [153389835.482085] [2018-08-10 16:22:34 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153389841.502905] [2018-08-10 16:23:35 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Amz-Sdk-Retry: 0/0/500
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Content-Length: 296
+Connection: Keep-Alive
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=eb785d02d8803c9a6acb9c8692a94ed1d696a35cf930f8cfdee4564de4d7521b
+X-Amz-Date: 20180810T105334Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Invocation-Id: 9cdb1fba-520c-0035-53a8-c2d41e0e6dd3
+Content-Type: application/xml; charset=ISO-8859-1
+
+<BODY>
+
+[RESPONSE] [153389841.502905] [2018-08-10 16:23:35 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153389855.109937] [2018-08-10 16:25:51 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+X-Amz-Date: 20180810T105550Z
+Amz-Sdk-Invocation-Id: 41a1e74e-6a82-3f5d-1285-d900d21418a2
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Connection: Keep-Alive
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=9c5d0d8f702501037e28498afcd5a494cede0fd8b2b260d26d8bbaa412c6e393
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Content-Length: 296
+
+<BODY>
+
+[RESPONSE] [153389855.109937] [2018-08-10 16:25:51 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153389903.439586] [2018-08-10 16:33:54 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+Content-Length: 296
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=47a3ba59c4d65e9d1e74e2a7a5c1daa56adde6db3d6c080c8bc0a24325a500e0
+Amz-Sdk-Invocation-Id: 677a36b9-b3ae-e838-a31f-57281823d96a
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Connection: Keep-Alive
+X-Amz-Date: 20180810T110354Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+
+<BODY>
+
+[RESPONSE] [153389903.439586] [2018-08-10 16:33:54 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153389918.137630] [2018-08-10 16:36:21 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+Connection: Keep-Alive
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Invocation-Id: dd73628b-7593-49c2-f37d-b424c6f4c1d6
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=352290b8f6f6112584982acfea28a4d1642277758061494a8b069833834a775c
+X-Amz-Date: 20180810T110621Z
+Content-Length: 296
+
+<BODY>
+
+[RESPONSE] [153389918.137630] [2018-08-10 16:36:21 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153391384.169522] [2018-08-10 20:40:41 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=36313b6479e4c8e128fc1baf2264238e3b9fa286152dc41bcff4a9a108fc18ee
+X-Amz-Date: 20180810T151041Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Invocation-Id: 171efa5e-c7e3-ce1a-728b-f18dd901224d
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+Connection: Keep-Alive
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Length: 292
+
+<BODY>
+
+[RESPONSE] [153391384.169522] [2018-08-10 20:40:41 +0530]
+200 OK
+X-Amz-Request-Id: 15498E8312455E3C
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153391400.713375] [2018-08-10 20:43:27 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+Content-Length: 292
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+X-Amz-Date: 20180810T151327Z
+Amz-Sdk-Invocation-Id: 37d61ba9-7157-9549-ff37-edfcf335cc48
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+Connection: Keep-Alive
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=819131c4af3f93536a36aa08f96e68b6b90f83f0a69d76bd499e6431a45a924f
+
+<BODY>
+
+[RESPONSE] [153391400.713375] [2018-08-10 20:43:27 +0530]
+200 OK
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 15498EA99731C87E
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153391408.819807] [2018-08-10 20:44:48 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+Amz-Sdk-Invocation-Id: b1f11b4c-074a-053f-a10e-43aa421443e0
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Length: 292
+Connection: Keep-Alive
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=c7b6dc47a0929f0e400dfcb78f2a4ddb127394eeec4cd886981d072dcb0e377a
+X-Amz-Date: 20180810T151448Z
+
+<BODY>
+
+[RESPONSE] [153391408.819807] [2018-08-10 20:44:48 +0530]
+200 OK
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 15498EBC76F922CF
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153391418.221562] [2018-08-10 20:46:22 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+Amz-Sdk-Retry: 0/0/500
+Connection: Keep-Alive
+Amz-Sdk-Invocation-Id: 3ff17a22-b89c-ab57-aecd-19ce9291d091
+X-Amz-Date: 20180810T151622Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+Content-Length: 292
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=6898f3bcce10e1e19ac1db0207b29847e6920e7e6b0d1989ce0866130f68b5d0
+
+<BODY>
+
+[RESPONSE] [153391418.221562] [2018-08-10 20:46:22 +0530]
+200 OK
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 15498ED25ADF8312
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153391424.238044] [2018-08-10 20:47:22 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=c4ea3c94cbe4db3e62bce775e680f87654fbf0ceaeb41d638ff3185a268e2566
+X-Amz-Date: 20180810T151722Z
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Connection: Keep-Alive
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Invocation-Id: 17901069-be3f-a5cc-3a25-d304b1b7f7dd
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+Content-Length: 292
+
+<BODY>
+
+[RESPONSE] [153391424.238044] [2018-08-10 20:47:22 +0530]
+200 OK
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 15498EE05CF63C1A
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153391638.382486] [2018-08-10 21:23:03 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=0bed39554664b79793c0b18a6a378db3d217dae9e00a9b131a3b1806ca91fdf7
+X-Amz-Date: 20180810T155303Z
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Connection: Keep-Alive
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Length: 296
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Invocation-Id: bf6aa3c6-6767-482f-d1cd-0b16637277bd
+
+<BODY>
+
+[RESPONSE] [153391638.382486] [2018-08-10 21:23:03 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153391729.662928] [2018-08-10 21:38:16 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=0f6723c2abd97130045ea82b181af17a1df9cbe7022073f1904f86d64a1ce5ca
+Amz-Sdk-Invocation-Id: 0bf5725b-b777-98fe-7ab7-20d3856d96a6
+Amz-Sdk-Retry: 0/0/500
+Content-Length: 296
+Connection: Keep-Alive
+X-Amz-Date: 20180810T160816Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+
+<BODY>
+
+[RESPONSE] [153391729.662928] [2018-08-10 21:38:16 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153391793.160029] [2018-08-10 21:48:51 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Content-Length: 296
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=f5f13ba72fd303d16a1d72874c1b5008cfe5f999aa1b28f97353ddc09f622fb7
+X-Amz-Date: 20180810T161851Z
+Amz-Sdk-Invocation-Id: ae6b65b4-b29b-560f-37e5-63db2aae504c
+Amz-Sdk-Retry: 0/0/500
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Connection: Keep-Alive
+
+<BODY>
+
+[RESPONSE] [153391793.160029] [2018-08-10 21:48:51 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153391800.028010] [2018-08-10 21:50:00 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+Content-Type: application/xml; charset=ISO-8859-1
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Amz-Sdk-Invocation-Id: 934a0672-3434-4df6-bfda-76201c45ac90
+Amz-Sdk-Retry: 0/0/500
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Content-Length: 296
+Connection: Keep-Alive
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180810/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=0a86de85a7a1e882ab9617da25a5103067b68b4ac263c4302a8d39ac030e985b
+X-Amz-Date: 20180810T161959Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+
+<BODY>
+
+[RESPONSE] [153391800.028010] [2018-08-10 21:50:00 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153395983.487369] [2018-08-11 09:27:14 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+Amz-Sdk-Retry: 0/0/500
+Connection: Keep-Alive
+Amz-Sdk-Invocation-Id: da5af1fb-b469-b6f2-3a25-9dd737d08489
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180811/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=353bd4069462253e2b49b4e61a6edb3609486a4a44ef2ad7043f7da453f1eea2
+X-Amz-Date: 20180811T035714Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Content-Length: 292
+
+<BODY>
+
+[RESPONSE] [153395983.487369] [2018-08-11 09:27:14 +0530]
+200 OK
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 1549B857B15ABFD3
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153398013.006267] [2018-08-11 15:05:30 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Content-Length: 296
+X-Amz-Date: 20180811T093529Z
+Amz-Sdk-Invocation-Id: 34b3dfe9-6d86-af88-ed2f-23c7230a6f7e
+Connection: Keep-Alive
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180811/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=ba7708abb634220c92fa08200a21bc98845a35c58abe5da59ebc5870a3fc4c6f
+
+<BODY>
+
+[RESPONSE] [153398013.006267] [2018-08-11 15:05:30 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153412922.306796] [2018-08-13 08:30:23 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+Content-Length: 296
+Amz-Sdk-Invocation-Id: d573863b-a255-5d46-0306-c70085802616
+Content-Type: application/xml; charset=ISO-8859-1
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180813/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=6cbe219373a7917e7132429e21a29a1860b384381aa1b5683648d0e910a7cec2
+X-Amz-Date: 20180813T030022Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Connection: Keep-Alive
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+
+<BODY>
+
+[RESPONSE] [153412922.306796] [2018-08-13 08:30:23 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153412929.220947] [2018-08-13 08:31:32 +0530]
+POST /sinha/test.csv?select&select-type=2
+Host: localhost:9000
+X-Amz-Content-Sha256: 1e124e5283e193c7a54a5e2b99a2c35a9bae7bc4fe8be5a0c3420882d6931ea1
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180813/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=56808d7dc9153a9176123c3d63acbee4d406034ba8db557d4d1245baf71a57b1
+X-Amz-Date: 20180813T030132Z
+Amz-Sdk-Invocation-Id: c8239ac7-d46c-356c-5b17-9b3dd80540bc
+Content-Length: 292
+Connection: Keep-Alive
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: ywnj+mjkdPDOkxkPYXprpQ==
+
+<BODY>
+
+[RESPONSE] [153412929.220947] [2018-08-13 08:31:32 +0530]
+200 OK
+Content-Security-Policy: block-all-mixed-content
+X-Amz-Request-Id: 154A52768DA940F1
+Vary: Origin
+X-Xss-Protection: 1; mode=block
+
+<BODY>
+
+[REQUEST (*webAPIHandlers).Upload-fm] [153413079.176967] [2018-08-13 08:56:31 +0530]
+PUT /minio/upload/sinha/One.json
+Host: localhost:9000
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MzQyMTcxMjAsInN1YiI6Im1pbmlvIn0.qwOg4tjevfg0k4K0nm4_id-B_l3LabLw-9eq2EVY_we4gfeaMmfXPnqVsQhVOtFy5GdFGO5499RhRSXVO7BBHA
+X-Amz-Date: 20180813T032631Z
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 Safari/537.36
+Accept: */*
+Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+Connection: keep-alive
+Content-Length: 84
+Accept-Encoding: gzip, deflate, br
+Origin: http://localhost:9000
+Content-Type: application/json
+Referer: http://localhost:9000/minio/sinha/
+
+<BODY>
+
+[RESPONSE] [153413079.176967] [2018-08-13 08:56:31 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153413082.163957] [2018-08-13 08:57:01 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180813/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=e95bed318d7f0b895fbd3b95a62ca1a5a3c073c7e73abc65e121cc6659ad172f
+Amz-Sdk-Invocation-Id: 170bfe93-1144-96da-8179-9c002c3ce9ec
+Connection: Keep-Alive
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Content-Length: 296
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+X-Amz-Date: 20180813T032701Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+
+<BODY>
+
+[RESPONSE] [153413082.163957] [2018-08-13 08:57:01 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153413083.575125] [2018-08-13 08:57:15 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+Connection: Keep-Alive
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180813/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=579b1132bab36d617e798c1bc33b3571b51662f7c97a03907305ffaa2ffa1d5e
+X-Amz-Date: 20180813T032715Z
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Length: 296
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Invocation-Id: f0dc1948-22c9-d7e5-ac57-72ec66fc4755
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+
+<BODY>
+
+[RESPONSE] [153413083.575125] [2018-08-13 08:57:15 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153413090.198099] [2018-08-13 08:58:21 +0530]
+POST /sinha/One.json?select&select-type=2
+Host: localhost:9000
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Connection: Keep-Alive
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180813/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=e0e5fe12a30dce64de9b589544a2ee1d52b0a929b225313103bd8e7b248c5db7
+X-Amz-Date: 20180813T032821Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Amz-Sdk-Invocation-Id: ccfe0c49-7378-782f-78ed-c6829deee26d
+Content-Length: 296
+
+<BODY>
+
+[RESPONSE] [153413090.198099] [2018-08-13 08:58:21 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153413375.577643] [2018-08-13 09:45:55 +0530]
+POST /sinha/One.json?select&select-type=2
+Host: localhost:9000
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Connection: Keep-Alive
+X-Amz-Date: 20180813T041555Z
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180813/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=35a207d69ce1c225577886cab35658db7306dab06b9420817f49f7b07464213e
+Amz-Sdk-Invocation-Id: 3485c091-0ea3-bfbb-d24d-09dcbeb03bbc
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Content-Length: 296
+
+<BODY>
+
+[RESPONSE] [153413375.577643] [2018-08-13 09:45:55 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153413396.511710] [2018-08-13 09:49:25 +0530]
+POST /sinha/One.json?select&select-type=2
+Host: localhost:9000
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180813/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=9fc20576e2f67679b08fceccb4eacb096831c76ad8bedc3426dd290b6d910311
+Amz-Sdk-Retry: 0/0/500
+Amz-Sdk-Invocation-Id: dbd7fe7d-cfdf-22d9-cac5-80844483b21a
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Content-Length: 296
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+X-Amz-Date: 20180813T041924Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Connection: Keep-Alive
+
+<BODY>
+
+[RESPONSE] [153413396.511710] [2018-08-13 09:49:25 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153413403.108716] [2018-08-13 09:50:31 +0530]
+POST /sinha/One.json?select&select-type=2
+Host: localhost:9000
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+Content-Length: 296
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180813/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=b4a9ddc6891689a37591d6c02618102e382ffce02c72dc5fb5cadab973957716
+X-Amz-Date: 20180813T042030Z
+Amz-Sdk-Invocation-Id: 7ef665a8-2503-6503-04ab-a8d4e4a16051
+Content-Type: application/xml; charset=ISO-8859-1
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Connection: Keep-Alive
+
+<BODY>
+
+[RESPONSE] [153413403.108716] [2018-08-13 09:50:31 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153413420.928549] [2018-08-13 09:53:29 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Connection: Keep-Alive
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180813/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=a9a2ec17fcfadd9212645a64a076af9310938260512acee578df7b91c06b8f2c
+Amz-Sdk-Invocation-Id: 7fc3829a-6e09-52cd-114c-9858dfa3bea7
+Content-Length: 296
+X-Amz-Date: 20180813T042329Z
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+
+<BODY>
+
+[RESPONSE] [153413420.928549] [2018-08-13 09:53:29 +0530]
+
+<BODY>
+
+[REQUEST (objectAPIHandlers).SelectObjectContentHandler-fm] [153415202.695199] [2018-08-13 14:50:26 +0530]
+POST /sinha/s3json.json?select&select-type=2
+Host: localhost:9000
+X-Amz-Date: 20180813T092026Z
+Amz-Sdk-Retry: 0/0/500
+Content-Type: application/xml; charset=ISO-8859-1
+X-Amz-Content-Sha256: fd1cc271f8710a1a2644df4799afd6d44bbffa2f6b7646d3d42ab3958c8c83c7
+Amz-Sdk-Invocation-Id: 4f85dea5-4c62-50bf-7614-53f324116344
+Content-Md5: M31L1w1PC7sBa/s1ImmMUg==
+Content-Length: 296
+Connection: Keep-Alive
+Authorization: AWS4-HMAC-SHA256 Credential=minio/20180813/US_EAST_1/s3/aws4_request, SignedHeaders=amz-sdk-invocation-id;amz-sdk-retry;content-length;content-md5;content-type;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=9de50c19487988318944a8a970a13d5e4b077180dd8ede62988d6d17620820f5
+User-Agent: aws-sdk-java/1.11.379 Linux/4.13.0-46-generic Java_HotSpot(TM)_64-Bit_Server_VM/10.0.2+13 java/10.0.2
+
+<BODY>
+
+[RESPONSE] [153415202.695199] [2018-08-13 14:50:26 +0530]
+
+<BODY>
+

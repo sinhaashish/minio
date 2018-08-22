@@ -17,6 +17,8 @@
 package s3select
 
 import (
+	"encoding/json"
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -45,10 +47,138 @@ func (reader *Input) runSelectParser(selectExpression string, myRow chan *Row) {
 	reader.processSelectReq(reqCols, alias, whereClause, myLimit, aggFunctionNames, myRow, myFuncs)
 }
 
+// RunSqlParser allows us to easily bundle all the functions from above and run
+// them in the appropriate order.
+func (reader *JSONInput) runSelectParser(selectExpression string, myRow chan *Row) {
+	reqCols, alias, myLimit, whereClause, aggFunctionNames, myFuncs, myErr := reader.ParseSelect(selectExpression)
+	if myErr != nil {
+		rowStruct := &Row{
+			err: myErr,
+		}
+		myRow <- rowStruct
+		return
+	}
+	reader.processSelectReq(reqCols, alias, whereClause, myLimit, aggFunctionNames, myRow, myFuncs)
+}
+
 // ParseSelect parses the SELECT expression, and effectively tokenizes it into
 // its separate parts. It returns the requested column names,alias,limit of
 // records, and the where clause.
 func (reader *Input) ParseSelect(sqlInput string) ([]string, string, int64, interface{}, []string, *SelectFuncs, error) {
+	// return columnNames, alias, limitOfRecords, whereclause,coalStore, nil
+
+	stmt, err := sqlparser.Parse(sqlInput)
+	var whereClause interface{}
+	var alias string
+	var limit int64
+	myFuncs := &SelectFuncs{}
+	// TODO Maybe can parse their errors a bit to return some more of the s3 errors
+	if err != nil {
+		return nil, "", 0, nil, nil, nil, ErrLexerInvalidChar
+	}
+	switch stmt := stmt.(type) {
+	case *sqlparser.Select:
+		// evaluates the where clause
+		functionNames := make([]string, len(stmt.SelectExprs))
+		columnNames := make([]string, len(stmt.SelectExprs))
+
+		if stmt.Where != nil {
+			switch expr := stmt.Where.Expr.(type) {
+			default:
+				whereClause = expr
+			case *sqlparser.ComparisonExpr:
+				whereClause = expr
+			}
+		}
+		if stmt.SelectExprs != nil {
+			for i := 0; i < len(stmt.SelectExprs); i++ {
+				switch expr := stmt.SelectExprs[i].(type) {
+				case *sqlparser.StarExpr:
+					columnNames[0] = "*"
+				case *sqlparser.AliasedExpr:
+					switch smallerexpr := expr.Expr.(type) {
+					case *sqlparser.FuncExpr:
+						if smallerexpr.IsAggregate() {
+							functionNames[i] = smallerexpr.Name.CompliantName()
+							// Will return function name
+							// Case to deal with if we have functions and not an asterix
+							switch tempagg := smallerexpr.Exprs[0].(type) {
+							case *sqlparser.StarExpr:
+								columnNames[0] = "*"
+								if smallerexpr.Name.CompliantName() != "count" {
+									return nil, "", 0, nil, nil, nil, ErrParseUnsupportedCallWithStar
+								}
+							case *sqlparser.AliasedExpr:
+								switch col := tempagg.Expr.(type) {
+								case *sqlparser.BinaryExpr:
+									return nil, "", 0, nil, nil, nil, ErrParseNonUnaryAgregateFunctionCall
+								case *sqlparser.ColName:
+									columnNames[i] = col.Name.CompliantName()
+								}
+							}
+							// Case to deal with if COALESCE was used..
+						} else if supportedFunc(smallerexpr.Name.CompliantName()) {
+							if myFuncs.funcExpr == nil {
+								myFuncs.funcExpr = make([]*sqlparser.FuncExpr, len(stmt.SelectExprs))
+								myFuncs.index = make([]int, len(stmt.SelectExprs))
+							}
+							myFuncs.funcExpr[i] = smallerexpr
+							myFuncs.index[i] = i
+						} else {
+							return nil, "", 0, nil, nil, nil, ErrUnsupportedSQLOperation
+						}
+					case *sqlparser.ColName:
+						columnNames[i] = smallerexpr.Name.CompliantName()
+					}
+				}
+			}
+		}
+
+		// This code retrieves the alias and makes sure it is set to the correct
+		// value, if not it sets it to the tablename
+		if (stmt.From) != nil {
+			for i := 0; i < len(stmt.From); i++ {
+				switch smallerexpr := stmt.From[i].(type) {
+				case *sqlparser.JoinTableExpr:
+					return nil, "", 0, nil, nil, nil, ErrParseMalformedJoin
+				case *sqlparser.AliasedTableExpr:
+					alias = smallerexpr.As.CompliantName()
+					if alias == "" {
+						alias = sqlparser.GetTableName(smallerexpr.Expr).CompliantName()
+					}
+				}
+
+			}
+		}
+		if stmt.Limit != nil {
+			switch expr := stmt.Limit.Rowcount.(type) {
+			case *sqlparser.SQLVal:
+				// The Value of how many rows we're going to limit by
+				parsedLimit, _ := strconv.Atoi(string(expr.Val[:]))
+				limit = int64(parsedLimit)
+			}
+		}
+		if stmt.GroupBy != nil {
+			return nil, "", 0, nil, nil, nil, ErrParseUnsupportedLiteralsGroupBy
+		}
+		if stmt.OrderBy != nil {
+			return nil, "", 0, nil, nil, nil, ErrParseUnsupportedToken
+		}
+		if err := reader.parseErrs(columnNames, whereClause, alias, myFuncs); err != nil {
+			return nil, "", 0, nil, nil, nil, err
+		}
+		return columnNames, alias, limit, whereClause, functionNames, myFuncs, nil
+	}
+	return nil, "", 0, nil, nil, nil, nil
+}
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     PARSE SELECT FOR JSON  STARTS    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+// ParseSelect parses the SELECT expression, and effectively tokenizes it into
+// its separate parts. It returns the requested column names,alias,limit of
+// records, and the where clause.
+func (reader *JSONInput) ParseSelect(sqlInput string) ([]string, string, int64, interface{}, []string, *SelectFuncs, error) {
 	// return columnNames, alias, limitOfRecords, whereclause,coalStore, nil
 
 	stmt, err := sqlparser.Parse(sqlInput)
@@ -154,6 +284,10 @@ func (reader *Input) ParseSelect(sqlInput string) ([]string, string, int64, inte
 	}
 	return nil, "", 0, nil, nil, nil, nil
 }
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     PARSE SELECT FOR JSON ENDS    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
 
 // This is the main function, It goes row by row and for records which validate
 // the where clause it currently prints the appropriate row given the requested
@@ -282,6 +416,80 @@ func (reader *Input) processSelectReq(reqColNames []string, alias string, whereC
 	}
 }
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     PARSE SELECT FOR JSON STARTS    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+
+// This is the main function, It goes row by row and for records which validate
+// the where clause it currently prints the appropriate row given the requested
+// columns.
+func (reader *JSONInput) processSelectReq(reqColNames []string, alias string, whereClause interface{}, limitOfRecords int64, functionNames []string, myRow chan *Row, myFunc *SelectFuncs) {
+	functionFlag := false
+	counter := -1
+	filtrCount := 0
+	//columnsMap := make(map[string]int)
+	condition := true
+	if limitOfRecords == 0 {
+		limitOfRecords = math.MaxInt64
+	}
+	for {
+		readerJson := reader.jsonRead()
+		out, err := json.Marshal(readerJson)
+		if err != nil {
+			fmt.Println("error:", err)
+		}
+		record := string(out)
+		reader.stats.BytesProcessed += int64(len(out))
+		if readerJson == nil {
+			fmt.Println(" Last baar m hi ghusega hi ")
+			if record == "" {
+				if functionFlag {
+					rowStruct := &Row{
+						record: string(out) + "\n",
+					}
+					myRow <- rowStruct
+				}
+				close(myRow)
+				return
+			}
+
+		}
+		if int64(filtrCount) == limitOfRecords && limitOfRecords != 0 {
+			close(myRow)
+			return
+		}
+		// The call to the where function clause,ensures that the rows we print match our where clause.
+		// condition, myErr := whereClauseForJson(record, columnsMap, alias, whereClause)
+		// if myErr != nil {
+		// 	rowStruct := &Row{
+		// 		err: myErr,
+		// 	}
+		// 	myRow <- rowStruct
+		// 	return
+		// }
+
+		if condition {
+			// if its an asterix we just print everything in the row
+			if reqColNames[0] == "*" && functionNames[0] == "" {
+				rowStruct := &Row{
+					//record: reader.printAsterix(record) + "\n",
+					record: record + "\n",
+				}
+				myRow <- rowStruct
+			}
+			filtrCount++
+		}
+
+		counter++
+
+		if readerJson == nil {
+			fmt.Println(" Khatamm ho gaya ")
+			break
+		}
+	}
+
+}
+
 // printAsterix helps to print out the entire row if an asterix is used.
 func (reader *Input) printAsterix(record []string) string {
 	myRow := record[0]
@@ -300,6 +508,24 @@ func (reader *Input) processColumnNames(reqColNames []string, alias string) erro
 	}
 	return nil
 }
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     PARSE SELECT FOR JSON STARTS  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+
+// processColumnNames is a function which allows for cleaning of column names.
+func (reader *JSONInput) processColumnNames(reqColNames []string, alias string) error {
+	for i := 0; i < len(reqColNames); i++ {
+		// The code below basically cleans the column name of its alias and other
+		// syntax, so that we can extract its pure name.
+		reqColNames[i] = cleanCol(reqColNames[i], alias)
+	}
+	return nil
+}
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     PARSE SELECT FOR JSON ENDS    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% //
 
 // processColNameIndex is the function which creates the row for an index based
 // query.
