@@ -35,6 +35,7 @@ import (
 	"github.com/minio/minio/cmd/logger"
 	"github.com/minio/minio/pkg/auth"
 	h2 "github.com/minio/minio/pkg/hash"
+	"github.com/minio/minio/pkg/lifecycle"
 	"github.com/minio/minio/pkg/policy"
 	"github.com/minio/minio/pkg/policy/condition"
 
@@ -847,4 +848,20 @@ func (l *b2Objects) DeleteBucketPolicy(ctx context.Context, bucket string) error
 // IsCompressionSupported returns whether compression is applicable for this layer.
 func (l *b2Objects) IsCompressionSupported() bool {
 	return false
+}
+
+// SetBucketLifeCycle sets lifecycle on bucket
+func (l *b2Objects) SetBucketLifeCycle(ctx context.Context, bucket string, lifecycle *lifecycle.LifeCycle) error {
+	logger.LogIf(ctx, minio.NotImplemented{})
+	return minio.NotImplemented{}
+}
+
+// GetBucketLifeCycle will get lifecycle on bucket
+func (l *b2Objects) GetBucketLifeCycle(ctx context.Context, bucket string) (*lifecycle.LifeCycle, error) {
+	return nil, minio.NotImplemented{}
+}
+
+// DeleteBucketLifeCycle deletes all lifecycle on bucket
+func (l *b2Objects) DeleteBucketLifeCycle(ctx context.Context, bucket string) error {
+	return minio.NotImplemented{}
 }
