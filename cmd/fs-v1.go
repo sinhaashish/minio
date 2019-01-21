@@ -158,6 +158,8 @@ func NewFSObjectLayer(fsPath string) (ObjectLayer, error) {
 
 	go fs.cleanupStaleMultipartUploads(ctx, GlobalMultipartCleanupInterval, GlobalMultipartExpiry, GlobalServiceDoneCh)
 
+	go fs.executeService(ctx, GlobalServiceExecutionInterval, GlobalServiceDoneCh)
+
 	// Return successfully initialized object layer.
 	return fs, nil
 }

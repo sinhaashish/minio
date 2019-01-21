@@ -844,6 +844,22 @@ func (xl xlObjects) cleanupStaleMultipartUploads(ctx context.Context, cleanupInt
 	}
 }
 
+// execute service routine.
+func (xl xlObjects) executeService(ctx context.Context, serviceExecutionInterval time.Duration, doneCh chan struct{}) {
+	ticker := time.NewTicker(serviceExecutionInterval)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-doneCh:
+			return
+		case <-ticker.C:
+			fmt.Print("\n ashish -xl")
+		}
+	}
+
+}
+
 // Remove the old multipart uploads on the given disk.
 func (xl xlObjects) cleanupStaleMultipartUploadsOnDisk(ctx context.Context, disk StorageAPI, expiry time.Duration) {
 	now := time.Now()

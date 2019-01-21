@@ -290,6 +290,7 @@ func newXLSets(endpoints EndpointList, format *formatXLV3, setCount int, drivesP
 			bp:       bp,
 		}
 		go s.sets[i].cleanupStaleMultipartUploads(context.Background(), GlobalMultipartCleanupInterval, GlobalMultipartExpiry, GlobalServiceDoneCh)
+		go s.sets[i].executeService(context.Background(), GlobalServiceExecutionInterval, GlobalServiceDoneCh)
 	}
 
 	// Connect disks right away, but wait until we have `format.json` quorum.

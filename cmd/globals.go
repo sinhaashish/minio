@@ -83,10 +83,13 @@ const (
 	// GlobalMultipartCleanupInterval - Cleanup interval when the stale multipart cleanup is initiated.
 	GlobalMultipartCleanupInterval = time.Hour * 24 // 24 hrs.
 
+	// GlobalServiceExecutionInterval - Executes the LifeCycle events.
+	GlobalServiceExecutionInterval = time.Second * 60 // 24 hrs.
+
 	// Refresh interval to update in-memory bucket policy cache.
 	globalRefreshBucketPolicyInterval = 5 * time.Minute
 	// Refresh interval to update in-memory bucket lifecycle cache.
-	globalRefreshBucketLifeCycleInterval = 5 * time.Minute
+	globalRefreshBucketLifeCycleInterval = 10 * time.Second
 	// Refresh interval to update in-memory iam config cache.
 	globalRefreshIAMInterval = 5 * time.Minute
 

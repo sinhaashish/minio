@@ -199,6 +199,53 @@ func (sys *LifeCycleSys) removeDeletedBuckets(bucketInfos []BucketInfo) {
 func (sys *LifeCycleSys) Remove(bucketName string) {
 	sys.Lock()
 	defer sys.Unlock()
-
 	delete(sys.bucketLifeCycleMap, bucketName)
+}
+
+// Executes the lifecycle of bucket
+func lifeCycleService(ctx context.Context, objAPI ObjectLayer, presentLifeCycle map[string]lifecycle.LifeCycle, now time.Time) {
+	for bucketName, bucketlifecycle := range presentLifeCycle {
+		for _, Rule := range bucketlifecycle.Rules {
+			if Rule.Status == Enabled {
+				prefix := ""
+				if Rule.Filter.Prefix != "" {
+					prefix = Rule.Filter.Prefix
+				}
+				objectslist, err := objAPI.ListObjects(ctx, bucketName, prefix, "", "", 1000)
+				if err != nil {
+					break
+				}
+				for _, object := range objectslist.Objects {
+					//Check for Expiration in Rule of LifeCycle
+					if Rule.Expiration != (lifecycle.Expiration{}) {
+						if Rule.Expiration.Date != "" {
+							expiry, err := time.Parse(time.RFC1123, Rule.Expiration.Date)
+							if err != nil {
+								logger.LogIf(ctx, err)
+							}
+							if object.ModTime.Sub(expiry) < 0 {
+								// Delete Object
+								objAPI.DeleteObject(ctx, bucketName, object.Name)
+							}
+						} else {
+							if now.Sub(object.ModTime) > time.Hour*24*time.Duration(Rule.Expiration.Days) {
+								// Delete Object
+								objAPI.DeleteObject(ctx, bucketName, object.Name)
+							}
+						}
+
+					}
+
+					// Check for Transition Action is Present
+					// Transition Action functionality yet to be implemented
+					if Rule.Transition != (lifecycle.Transition{}) {
+					}
+
+				}
+
+			}
+		}
+
+	}
+
 }
