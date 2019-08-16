@@ -19,6 +19,7 @@ package madmin
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -337,4 +338,135 @@ func (adm *AdminClient) ServerMemUsageInfo() ([]ServerMemUsageInfo, error) {
 	}
 
 	return info, nil
+}
+
+// ETCDInfo Contains the vault info
+type ETCDInfo struct {
+	ETCDEndpoint string `json:"endpoint"` // The ETCD API endpoint as URL
+	Domain       string `json:"domain"`   // The domain specified
+	PublicIPs    string `json:"ip"`       // The defined Public IPs
+}
+
+// ServerETCDInfo fetches the etcd server info
+func (adm *AdminClient) ServerETCDInfo() (ETCDInfo, error) {
+	fmt.Println(" test")
+	v := url.Values{}
+	v.Set("infoType", string("etcd"))
+	resp, err := adm.executeMethod("GET", requestData{
+		relPath:     "/v1/info",
+		queryValues: v,
+	})
+	defer closeResponse(resp)
+	if err != nil {
+		return ETCDInfo{}, err
+	}
+
+	// Check response http status code
+	if resp.StatusCode != http.StatusOK {
+		return ETCDInfo{}, httpRespToErrorResponse(resp)
+	}
+
+	// Unmarshal the server's json response
+	var etcdInfo ETCDInfo
+
+	respBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return ETCDInfo{}, err
+	}
+
+	err = json.Unmarshal(respBytes, &etcdInfo)
+	if err != nil {
+		return ETCDInfo{}, err
+	}
+
+	return etcdInfo, nil
+}
+
+type loggerHTTP struct {
+	Enabled  bool   `json:"enabled"`
+	Endpoint string `json:"endpoint"`
+}
+type loggerConsole struct {
+	Enabled bool `json:"enabled"`
+}
+
+// LoggingInfo Contains the logger info
+type LoggingInfo struct {
+	Console loggerConsole         `json:"console"`
+	HTTP    map[string]loggerHTTP `json:"http"`
+}
+
+// ServerLoggingInfo fetches the logger server info
+func (adm *AdminClient) ServerLoggingInfo() (LoggingInfo, error) {
+	fmt.Println(" test")
+	v := url.Values{}
+	v.Set("infoType", string("log"))
+	resp, err := adm.executeMethod("GET", requestData{
+		relPath:     "/v1/info",
+		queryValues: v,
+	})
+	defer closeResponse(resp)
+	if err != nil {
+		return LoggingInfo{}, err
+	}
+
+	// Check response http status code
+	if resp.StatusCode != http.StatusOK {
+		return LoggingInfo{}, httpRespToErrorResponse(resp)
+	}
+
+	// Unmarshal the server's json response
+	var logInfo LoggingInfo
+
+	respBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return LoggingInfo{}, err
+	}
+
+	err = json.Unmarshal(respBytes, &logInfo)
+	if err != nil {
+		return LoggingInfo{}, err
+	}
+
+	return logInfo, nil
+}
+
+// LambdaInfo gives notification queue configuration.
+type LambdaInfo struct {
+	// Notify notifier `json:"notify"`
+}
+
+// ServerLambdaInfo fetches the lambda info
+func (adm *AdminClient) ServerLambdaInfo() (LambdaInfo, error) {
+	fmt.Println(" test")
+	v := url.Values{}
+	v.Set("infoType", string("lambda"))
+	resp, err := adm.executeMethod("GET", requestData{
+		relPath:     "/v1/info",
+		queryValues: v,
+	})
+	defer closeResponse(resp)
+	if err != nil {
+		return LambdaInfo{}, err
+	}
+
+	// Check response http status code
+	if resp.StatusCode != http.StatusOK {
+		return LambdaInfo{}, httpRespToErrorResponse(resp)
+	}
+
+	// Unmarshal the server's json response
+	var lambdaInfo LambdaInfo
+
+	respBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return LambdaInfo{}, err
+	}
+
+	err = json.Unmarshal(respBytes, &lambdaInfo)
+	if err != nil {
+		return LambdaInfo{}, err
+	}
+
+	return lambdaInfo, nil
 }

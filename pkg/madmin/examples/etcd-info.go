@@ -17,28 +17,30 @@
  *
  */
 
-package main
+ package main
 
-import (
-	"log"
-
-	"github.com/minio/minio/pkg/madmin"
-)
-
-func main() {
-	// Note: YOUR-ACCESSKEYID, YOUR-SECRETACCESSKEY and my-bucketname are
-	// dummy values, please replace them with original values.
-
-	// API requests are secure (HTTPS) if secure=true and insecure (HTTPS) otherwise.
-	// New returns an MinIO Admin client object.
-	madmClnt, err := madmin.New("your-minio.example.com:9000", "YOUR-ACCESSKEYID", "YOUR-SECRETACCESSKEY", true)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	st, err := madmClnt.ServerMemUsageInfo()
-	if err != nil {
-		log.Fatalln(err)
-	}
-	log.Println(st)
-}
+ import (
+	 "github.com/minio/minio/pkg/madmin"
+	 "log"
+	 "os"
+ )
+ 
+ func main() {
+	 // Note: YOUR-ACCESSKEYID, YOUR-SECRETACCESSKEY and my-bucketname are
+	 // dummy values, please replace them with original values.
+ 
+	 // API requests are secure (HTTPS) if secure=true and insecure (HTTPS) otherwise.
+	 // New returns an MinIO Admin client object.
+	 madmClnt, err := madmin.New("ashish:9002", "minio", "minio123", false)
+	 if err != nil {
+		 log.Fatalln(err)
+	 }
+	 madmClnt.TraceOn(os.Stderr)
+ 
+	 vaultInfo, err := madmClnt.ServerETCDInfo()
+	 if err != nil {
+		 log.Fatalln(err)
+	 }
+	 log.Println(vaultInfo)
+ }
+ 

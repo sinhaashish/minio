@@ -22,6 +22,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -247,6 +248,13 @@ type VaultInfo struct {
 	Perm     Permission `json:"perm"`
 }
 
+// ETCDInfo Contains the vault info
+type ETCDInfo struct {
+	ETCDEndpoint string `json:"endpoint"` // The ETCD API endpoint as URL
+	Domain       string `json:"domain"`   // The domain specified
+	PublicIPs    string `json:"ip"`       // The defined Public IPs
+}
+
 // ServerInfoHandler - GET /minio/admin/v1/info?infoType={infoType}
 // ----------
 // Get server information
@@ -257,7 +265,7 @@ func (a adminAPIHandlers) ServerInfoHandler(w http.ResponseWriter, r *http.Reque
 	if objectAPI == nil {
 		return
 	}
-
+	var Environment = environment{}
 	vars := mux.Vars(r)
 	switch infoType := vars["infoType"]; infoType {
 	case "drive":
@@ -367,6 +375,71 @@ func (a adminAPIHandlers) ServerInfoHandler(w http.ResponseWriter, r *http.Reque
 			return
 		}
 		writeSuccessResponseJSON(w, jsonBytes)
+
+	case "etcd":
+		if globalEtcdClient == nil {
+			writeErrorResponseJSON(ctx, w, errorCodes.ToAPIErr(ErrKMSNotConfigured), r.URL)
+			return
+		}
+		etcdEndPoint := Environment.Get(EnvETCDEndpoints, "")
+		fmt.Println(etcdEndPoint)
+		minioDomain := Environment.Get(EnvMinioDomain, "")
+		publicIPs := Environment.Get(EnvETCDPublicIps, "")
+
+		etcdInfo := ETCDInfo{
+			ETCDEndpoint: etcdEndPoint,
+			Domain:       minioDomain,
+			PublicIPs:    publicIPs,
+		}
+		// Marshal API response
+		jsonBytes, err := json.Marshal(etcdInfo)
+		if err != nil {
+			writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
+			return
+		}
+		writeSuccessResponseJSON(w, jsonBytes)
+
+	case "log":
+		fmt.Println(" In Log ")
+		config, err := readServerConfig(ctx, objectAPI)
+		if err != nil {
+			writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
+			return
+		}
+
+		console := config.Logger.Console
+		HTTP := config.Logger.HTTP
+
+		if endpoint, ok := Environment.Lookup(EnvLoggerHTTPEndpoint); ok {
+			HTTP["envt_variabe"] = loggerHTTP{true, endpoint}
+		}
+		logInfo := LoggingInfo{console, HTTP}
+		// Marshal API response
+		jsonBytes, err := json.Marshal(logInfo)
+		if err != nil {
+			writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
+			return
+		}
+		fmt.Println(string(jsonBytes))
+		writeSuccessResponseJSON(w, jsonBytes)
+
+	case "lambda":
+		fmt.Println(" In Lambda ")
+		config, err := readServerConfig(ctx, objectAPI)
+		if err != nil {
+			writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
+			return
+		}
+		lambdaInfo := LambdaInfo{config.Notify}
+		// Marshal API response
+		jsonBytes, err := json.Marshal(lambdaInfo)
+		if err != nil {
+			writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
+			return
+		}
+		fmt.Println(string(jsonBytes))
+		writeSuccessResponseJSON(w, jsonBytes)
+
 	case "server":
 		serverInfo := globalNotificationSys.ServerInfo(ctx)
 		// Once we have received all the ServerInfo from peers
@@ -399,6 +472,17 @@ func (a adminAPIHandlers) ServerInfoHandler(w http.ResponseWriter, r *http.Reque
 		// distributed setup) as json.
 		writeSuccessResponseJSON(w, jsonBytes)
 	}
+}
+
+// LambdaInfo gives notification queue configuration.
+type LambdaInfo struct {
+	Notify notifier `json:"notify"`
+}
+
+// LoggingInfo Contains the logger info
+type LoggingInfo struct {
+	Console loggerConsole         `json:"console"`
+	HTTP    map[string]loggerHTTP `json:"http"`
 }
 
 // ServerDrivesPerfInfo holds information about address, performance

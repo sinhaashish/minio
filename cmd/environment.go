@@ -74,6 +74,22 @@ const (
 	// vault namespace. The vault namespace is used if the enterprise
 	// version of Hashicorp Vault is used.
 	EnvVaultNamespace = "MINIO_SSE_VAULT_NAMESPACE"
+
+	// EnvETCDEndpoints points to the etcd backend which manages MinIO's
+	// config.json and bucket DNS SRV records.
+	EnvETCDEndpoints = "MINIO_ETCD_ENDPOINTS"
+
+	// EnvMinioDomain indicates the domain suffix for the bucket which
+	// will be used to resolve bucket through DNS.
+	EnvMinioDomain = "MINIO_DOMAIN"
+
+	// EnvETCDPublicIps points to the public IP address where each cluster
+	// might be accessible, this is unique for each cluster.
+	EnvETCDPublicIps = "MINIO_PUBLIC_IPS"
+
+	// EnvLoggerHTTPEndpoint is the environment variable for HTTP target logging,
+	// this setting will override the endpoint settings in the MinIO server config.
+	EnvLoggerHTTPEndpoint = "MINIO_LOGGER_HTTP_ENDPOINT"
 )
 
 // Environment provides functions for accessing environment
