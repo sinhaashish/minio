@@ -22,6 +22,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -233,8 +234,20 @@ type ServerInfo struct {
 	Addr  string          `json:"addr"`
 	Data  *ServerInfoData `json:"data"`
 }
+type loggerHTTPInfo struct {
+	status bool `json:"status"`
+	Enabled  bool   `json:"enabled"`
+	Endpoint string `json:"endpoint"`
 
-// ServerInfoHandler - GET /minio/admin/v1/info
+}
+
+// LoggingInfo Contains the logger info
+type LoggingInfo struct {
+	Console loggerConsole             `json:"console"`
+	HTTP    map[string]loggerHTTPInfo `json:"http"`
+}
+
+// ServerInfoHandler - GET /minio/admin/v1/info?infoType={infoType}
 // ----------
 // Get server information
 func (a adminAPIHandlers) ServerInfoHandler(w http.ResponseWriter, r *http.Request) {
@@ -244,32 +257,60 @@ func (a adminAPIHandlers) ServerInfoHandler(w http.ResponseWriter, r *http.Reque
 	if objectAPI == nil {
 		return
 	}
+	var jsonBytes []byte
+	var err error
 
-	serverInfo := globalNotificationSys.ServerInfo(ctx)
-	// Once we have received all the ServerInfo from peers
-	// add the local peer server info as well.
-	serverInfo = append(serverInfo, ServerInfo{
-		Addr: getHostName(r),
-		Data: &ServerInfoData{
-			StorageInfo: objectAPI.StorageInfo(ctx),
-			ConnStats:   globalConnStats.toServerConnStats(),
-			HTTPStats:   globalHTTPStats.toServerHTTPStats(),
-			Properties: ServerProperties{
-				Uptime:       UTCNow().Sub(globalBootTime),
-				Version:      Version,
-				CommitID:     CommitID,
-				DeploymentID: globalDeploymentID,
-				SQSARN:       globalNotificationSys.GetARNList(),
-				Region:       globalServerConfig.GetRegion(),
+	vars := mux.Vars(r)
+	switch infoType := vars["infoType"]; infoType {
+	case "log":
+		fmt.Println(" In Log ")
+		config, err := readServerConfig(ctx, objectAPI)
+		if err != nil {
+			writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
+			return
+		}
+
+		console := config.Logger.Console
+		HTTP := config.Logger.HTTP
+
+		if endpoint, ok := Environment.Lookup(EnvLoggerHTTPEndpoint); ok {
+			HTTP["envt_variabe"] = loggerHTTP{true, endpoint}
+		}
+		logInfo := LoggingInfo{console, HTTP}
+		// Marshal API response
+		jsonBytes, err = json.Marshal(logInfo)
+		if err != nil {
+			writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
+			return
+		}
+
+	case "server":
+		serverInfo := globalNotificationSys.ServerInfo(ctx)
+		// Once we have received all the ServerInfo from peers
+		// add the local peer server info as well.
+		serverInfo = append(serverInfo, ServerInfo{
+			Addr: getHostName(r),
+			Data: &ServerInfoData{
+				StorageInfo: objectAPI.StorageInfo(ctx),
+				ConnStats:   globalConnStats.toServerConnStats(),
+				HTTPStats:   globalHTTPStats.toServerHTTPStats(),
+				Properties: ServerProperties{
+					Uptime:       UTCNow().Sub(globalBootTime),
+					Version:      Version,
+					CommitID:     CommitID,
+					DeploymentID: globalDeploymentID,
+					SQSARN:       globalNotificationSys.GetARNList(),
+					Region:       globalServerConfig.GetRegion(),
+				},
 			},
-		},
-	})
+		})
 
-	// Marshal API response
-	jsonBytes, err := json.Marshal(serverInfo)
-	if err != nil {
-		writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
-		return
+		// Marshal API response
+		jsonBytes, err = json.Marshal(serverInfo)
+		if err != nil {
+			writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
+			return
+		}
 	}
 
 	// Reply with storage information (across nodes in a
