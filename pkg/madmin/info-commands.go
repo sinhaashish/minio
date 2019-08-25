@@ -288,3 +288,51 @@ func (adm *AdminClient) ServerMemUsageInfo() ([]ServerMemUsageInfo, error) {
 
 	return info, nil
 }
+
+// type loggerHTTP struct {
+// 	Enabled  bool   `json:"enabled"`
+// 	Endpoint string `json:"endpoint"`
+// }
+type LoggerConsole struct {
+	Enabled bool `json:"enabled"`
+}
+
+// LoggingInfo contains the log targets
+type LoggingInfo struct {
+	Console LoggerConsole `json:"console"`
+	// HTTP    map[string]loggerHTTP `json:"http"`
+}
+
+// ServerLoggingInfo fetches the logger server info
+func (adm *AdminClient) ServerLoggingInfo() (LoggingInfo, error) {
+	v := url.Values{}
+	v.Set("type", string("log"))
+	resp, err := adm.executeMethod("GET", requestData{
+		relPath:     "/v1/info",
+		queryValues: v,
+	})
+	defer closeResponse(resp)
+	if err != nil {
+		return LoggingInfo{}, err
+	}
+
+	// Check response http status code
+	if resp.StatusCode != http.StatusOK {
+		return LoggingInfo{}, httpRespToErrorResponse(resp)
+	}
+
+	// Unmarshal the server's json response
+	var loggingInfo LoggingInfo
+
+	respBytes, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return LoggingInfo{}, err
+	}
+
+	err = json.Unmarshal(respBytes, &loggingInfo)
+	if err != nil {
+		return LoggingInfo{}, err
+	}
+
+	return loggingInfo, nil
+}
