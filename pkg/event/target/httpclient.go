@@ -44,6 +44,14 @@ func (target HTTPClientTarget) ID() event.TargetID {
 	return target.id
 }
 
+// IsActive - Return true if target is up and active
+func (target *HTTPClientTarget) IsActive() (bool, error) {
+	// if !target.args.pingBrokers() {
+	// 	return false, errNotConnected
+	// }
+	return true, nil
+}
+
 func (target *HTTPClientTarget) start() {
 	go func() {
 		defer func() {

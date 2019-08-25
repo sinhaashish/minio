@@ -234,18 +234,27 @@ type ServerInfo struct {
 	Addr  string          `json:"addr"`
 	Data  *ServerInfoData `json:"data"`
 }
-type loggerHTTPInfo struct {
-	status bool `json:"status"`
-	Enabled  bool   `json:"enabled"`
-	Endpoint string `json:"endpoint"`
 
+// LambdaInfo gives notification queue configuration.
+type LambdaInfo struct {
+	// Notify notifier `json:"notify"`
 }
 
-// LoggingInfo Contains the logger info
-type LoggingInfo struct {
-	Console loggerConsole             `json:"console"`
-	HTTP    map[string]loggerHTTPInfo `json:"http"`
-}
+// type LoggerConsole struct {
+// 	Enabled bool `json:"enabled"`
+// }
+
+// // LoggingInfo contains the log targets
+// type LoggingInfo struct {
+// 	Console LoggerConsole         `json:"console"`
+// 	HTTP    map[string]LoggerHTTP `json:"http"`
+// }
+
+// type LoggerHTTP struct {
+// 	IsActive bool   `json:"status"`
+// 	Enabled  bool   `json:"enabled"`
+// 	Endpoint string `json:"endpoint"`
+// }
 
 // ServerInfoHandler - GET /minio/admin/v1/info?infoType={infoType}
 // ----------
@@ -262,27 +271,21 @@ func (a adminAPIHandlers) ServerInfoHandler(w http.ResponseWriter, r *http.Reque
 
 	vars := mux.Vars(r)
 	switch infoType := vars["infoType"]; infoType {
-	case "log":
-		fmt.Println(" In Log ")
+	case "lambda":
+		fmt.Println(" In Lambda ")
 		config, err := readServerConfig(ctx, objectAPI)
 		if err != nil {
 			writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
 			return
 		}
+		lambdaInfo, _ := globalNotificationSys.getLambdaInfo(config)
 
-		console := config.Logger.Console
-		HTTP := config.Logger.HTTP
-
-		if endpoint, ok := Environment.Lookup(EnvLoggerHTTPEndpoint); ok {
-			HTTP["envt_variabe"] = loggerHTTP{true, endpoint}
-		}
-		logInfo := LoggingInfo{console, HTTP}
-		// Marshal API response
-		jsonBytes, err = json.Marshal(logInfo)
+		jsonBytes, err = json.Marshal(lambdaInfo)
 		if err != nil {
 			writeErrorResponseJSON(ctx, w, toAdminAPIErr(ctx, err), r.URL)
 			return
 		}
+		fmt.Println("Tansh", string(jsonBytes))
 
 	case "server":
 		serverInfo := globalNotificationSys.ServerInfo(ctx)

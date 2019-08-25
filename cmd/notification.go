@@ -1289,3 +1289,80 @@ func RemoveListener(objAPI ObjectLayer, bucketName string, targetID event.Target
 
 	return saveConfig(ctx, objAPI, configFile, data)
 }
+
+// getLambdaInfo - return the status of notification targets
+func (sys *NotificationSys) getLambdaInfo(config *serverConfig) (madmin.LambdaInfo, error) {
+	// var status bool
+	// var err error
+
+	var targets []madmin.Target
+
+	for _, target := range sys.targetList.List() {
+		fmt.Println(" sabna ", target.Name)
+		switch name := target.Name; name {
+		case "amqp":
+			if status, err := sys.targetList.Status(target); status {
+				p := config.Notify.AMQP[target.ID]
+				tar := madmin.Target{Status: status, Error: err, AMQP: &p}
+				targets = append(targets, tar)
+			}
+		case "elasticsearch":
+			if status, err := sys.targetList.Status(target); status {
+				a := config.Notify.Elasticsearch[target.ID]
+				tar := madmin.Target{Status: status, Error: err, Elasticsearch: &a}
+				targets = append(targets, tar)
+			}
+		case "kafka":
+			if status, err := sys.targetList.Status(target); status {
+				b := config.Notify.Kafka[target.ID]
+				tar := madmin.Target{Status: status, Error: err, Kafka: &b}
+				targets = append(targets, tar)
+			}
+		case "mqtt":
+			if status, err := sys.targetList.Status(target); status {
+				c := config.Notify.MQTT[target.ID]
+				tar := madmin.Target{Status: status, Error: err, MQTT: &c}
+				targets = append(targets, tar)
+			}
+		case "mysql":
+			if status, err := sys.targetList.Status(target); status {
+				d := config.Notify.MySQL[target.ID]
+				tar := madmin.Target{Status: status, Error: err, MySQL: &d}
+				targets = append(targets, tar)
+			}
+		case "nats":
+			if status, err := sys.targetList.Status(target); status {
+				e := config.Notify.NATS[target.ID]
+				tar := madmin.Target{Status: status, Error: err, NATS: &e}
+				targets = append(targets, tar)
+			}
+		case "nsq":
+			if status, err := sys.targetList.Status(target); status {
+				f := config.Notify.NSQ[target.ID]
+				tar := madmin.Target{Status: status, Error: err, NSQ: &f}
+				targets = append(targets, tar)
+			}
+		case "postgres":
+			if status, err := sys.targetList.Status(target); status {
+				g := config.Notify.PostgreSQL[target.ID]
+				tar := madmin.Target{Status: status, Error: err, PostgreSQL: &g}
+				targets = append(targets, tar)
+			}
+		case "redis":
+			if status, err := sys.targetList.Status(target); status {
+				h := config.Notify.Redis[target.ID]
+				tar := madmin.Target{Status: status, Error: err, Redis: &h}
+				targets = append(targets, tar)
+			}
+		case "webhook":
+			if status, err := sys.targetList.Status(target); status {
+				i := config.Notify.Webhook[target.ID]
+				tar := madmin.Target{Status: status, Error: err, Web: &i}
+				targets = append(targets, tar)
+			}
+		}
+	}
+	lambdaInfo := madmin.LambdaInfo{LambdaList: targets}
+	fmt.Println(len(targets))
+	return lambdaInfo, nil
+}

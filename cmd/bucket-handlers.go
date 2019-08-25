@@ -467,7 +467,7 @@ func (api objectAPIHandlers) PutBucketHandler(w http.ResponseWriter, r *http.Req
 	ctx := newContext(r, w, "PutBucket")
 
 	defer logger.AuditLog(w, r, "PutBucket", mustGetClaimsFromToken(r))
-
+	fmt.Println("ashish")
 	objectAPI := api.ObjectAPI()
 	if objectAPI == nil {
 		writeErrorResponse(ctx, w, errorCodes.ToAPIErr(ErrServerNotInitialized), r.URL, guessIsBrowserReq(r))

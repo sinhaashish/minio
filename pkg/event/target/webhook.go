@@ -77,6 +77,24 @@ func (target WebhookTarget) ID() event.TargetID {
 	return target.id
 }
 
+// IsActive - Return true if target is up and active
+func (target *WebhookTarget) IsActive() (bool, error) {
+	u, pErr := xnet.ParseURL(target.args.Endpoint.String())
+	if pErr != nil {
+		return false, pErr
+	}
+	if dErr := u.DialHTTP(); dErr != nil {
+		if urlErr, ok := dErr.(*url.Error); ok {
+			// To treat "connection refused" errors as errNotConnected.
+			if IsConnRefusedErr(urlErr.Err) {
+				return false, errNotConnected
+			}
+		}
+		return false, dErr
+	}
+	return true, nil
+}
+
 // Save - saves the events to the store if queuestore is configured, which will be replayed when the wenhook connection is active.
 func (target *WebhookTarget) Save(eventData event.Event) error {
 	if target.store != nil {

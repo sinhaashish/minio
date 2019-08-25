@@ -26,6 +26,7 @@ import (
 
 	"github.com/minio/minio/pkg/cpu"
 	"github.com/minio/minio/pkg/disk"
+	"github.com/minio/minio/pkg/event/target"
 	"github.com/minio/minio/pkg/mem"
 )
 
@@ -132,7 +133,7 @@ type ServerInfo struct {
 // to fetch server's information represented by ServerInfo structure
 func (adm *AdminClient) ServerInfo() ([]ServerInfo, error) {
 	v := url.Values{}
-	v.Set("infoType", string("server"))
+	v.Set("type", string("server"))
 	resp, err := adm.executeMethod("GET", requestData{relPath: "/v1/info", queryValues: v})
 	defer closeResponse(resp)
 	if err != nil {
@@ -291,50 +292,128 @@ func (adm *AdminClient) ServerMemUsageInfo() ([]ServerMemUsageInfo, error) {
 	return info, nil
 }
 
-type loggerHTTP struct {
-	Enabled  bool   `json:"enabled"`
-	Endpoint string `json:"endpoint"`
-}
-type loggerConsole struct {
-	Enabled bool `json:"enabled"`
+// Target has the list of targets with their status availibility info
+type Target struct {
+	Status        bool                      `json:"status,omitempty"`
+	Error         error                     `json:"error,omitempty"`
+	AMQP          *target.AMQPArgs          `json:"amqp,omitempty"`
+	Elasticsearch *target.ElasticsearchArgs `json:"elasticsearch,omitempty"`
+	Kafka         *target.KafkaArgs         `json:"kafka,omitempty"`
+	MQTT          *target.MQTTArgs          `json:"mqtt,omitempty"`
+	MySQL         *target.MySQLArgs         `json:"mysql,omitempty"`
+	NATS          *target.NATSArgs          `json:"nats,omitempty"`
+	NSQ           *target.NSQArgs           `json:"nsq,omitempty"`
+	PostgreSQL    *target.PostgreSQLArgs    `json:"postgresql,omitempty"`
+	Redis         *target.RedisArgs         `json:"redis,omitempty"`
+	Web           *target.WebhookArgs       `json:"webhook,omitempty"`
 }
 
-// LoggingInfo contains the log targets
-type LoggingInfo struct {
-	Console loggerConsole         `json:"console"`
-	HTTP    map[string]loggerHTTP `json:"http"`
+// // AQMPInfo with status
+// type AQMPInfo struct {
+// 	Status bool            `json:"status"`
+// 	Error  error           `json:"error"`
+// 	AMQP   target.AMQPArgs `json:"amqp"`
+// }
+
+// // ElasticsearchInfo with status
+// type ElasticsearchInfo struct {
+// 	Status        bool                     `json:"status"`
+// 	Error         error                    `json:"error"`
+// 	Elasticsearch target.ElasticsearchArgs `json:"elasticsearch"`
+// }
+
+// // KafkaInfo with status
+// type KafkaInfo struct {
+// 	Status bool             `json:"status"`
+// 	Error  error            `json:"error"`
+// 	Kafka  target.KafkaArgs `json:"kafka"`
+// }
+
+// // MQTTInfo with status
+// type MQTTInfo struct {
+// 	Status bool            `json:"status"`
+// 	Error  error           `json:"error"`
+// 	MQTT   target.MQTTArgs `json:"mqtt"`
+// }
+
+// // MySQLInfo with status
+// type MySQLInfo struct {
+// 	Status bool             `json:"status"`
+// 	Error  error            `json:"error"`
+// 	MySQL  target.MySQLArgs `json:"mysql"`
+// }
+
+// // NATSInfo with status
+// type NATSInfo struct {
+// 	Status bool            `json:"status"`
+// 	Error  error           `json:"error"`
+// 	NATS   target.NATSArgs `json:"nats"`
+// }
+
+// // NSQInfo with status
+// type NSQInfo struct {
+// 	Status bool           `json:"status"`
+// 	Error  error          `json:"error"`
+// 	NSQ    target.NSQArgs `json:"nsq"`
+// }
+
+// // PostgreSQLInfo with status
+// type PostgreSQLInfo struct {
+// 	Status     bool                  `json:"status"`
+// 	Error      error                 `json:"error"`
+// 	PostgreSQL target.PostgreSQLArgs `json:"postgresql"`
+// }
+
+// // RedisInfo with status
+// type RedisInfo struct {
+// 	Status bool             `json:"status"`
+// 	Error  error            `json:"error"`
+// 	Redis  target.RedisArgs `json:"redis"`
+// }
+
+// // WebhookInfo with status
+// type WebhookInfo struct {
+// 	Status bool               `json:"status"`
+// 	Error  error              `json:"error"`
+// 	Web    target.WebhookArgs `json:"webhook"`
+// }
+
+// LambdaInfo -
+type LambdaInfo struct {
+	LambdaList []Target `json:"target"`
 }
 
-// ServerLoggingInfo fetches the logger server info
-func (adm *AdminClient) ServerLoggingInfo() (LoggingInfo, error) {
+// ServerLambdaInfo fetches the logger server info
+func (adm *AdminClient) ServerLambdaInfo() ([]Target, error) {
 	v := url.Values{}
-	v.Set("infoType", string("log"))
+	v.Set("type", string("lambda"))
 	resp, err := adm.executeMethod("GET", requestData{
 		relPath:     "/v1/info",
 		queryValues: v,
 	})
 	defer closeResponse(resp)
 	if err != nil {
-		return LoggingInfo{}, err
+		return nil, err
 	}
 
 	// Check response http status code
 	if resp.StatusCode != http.StatusOK {
-		return LoggingInfo{}, httpRespToErrorResponse(resp)
+		return nil, httpRespToErrorResponse(resp)
 	}
 
 	// Unmarshal the server's json response
-	var logInfo LoggingInfo
+	// Unmarshal the server's json response
+	var lambdaInfo []Target
 
 	respBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return LoggingInfo{}, err
+		return nil, err
 	}
 
-	err = json.Unmarshal(respBytes, &logInfo)
+	err = json.Unmarshal(respBytes, &lambdaInfo)
 	if err != nil {
-		return LoggingInfo{}, err
+		return nil, err
 	}
 
-	return logInfo, nil
+	return lambdaInfo, nil
 }

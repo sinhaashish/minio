@@ -51,7 +51,7 @@ func registerAdminRouter(router *mux.Router, enableConfigOps, enableIAMOps bool)
 	adminV1Router.Methods(http.MethodPost).Path("/service").HandlerFunc(httpTraceAll(adminAPI.ServiceStopNRestartHandler))
 
 	// Info operations - return details based on input type
-	adminV1Router.Methods(http.MethodGet).Path("/info").HandlerFunc(httpTraceAll(adminAPI.ServerInfoHandler)).Queries("infoType", "{infoType:.*}")
+	adminV1Router.Methods(http.MethodGet).Path("/info").HandlerFunc(httpTraceAll(adminAPI.ServerInfoHandler)).Queries("type", "{infoType:.*}")
 
 	if globalIsDistXL || globalIsXL {
 		/// Heal operations

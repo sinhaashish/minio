@@ -1,6 +1,6 @@
 // +build ignore
 
-  /*
+ /*
  * MinIO Cloud Storage, (C) 2019 MinIO, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,24 +20,24 @@
  package main
 
  import (
-   "github.com/minio/minio/pkg/madmin"
-   "log"
+	"github.com/minio/minio/pkg/madmin"
+	"log"
 )
 
  func main() {
-   // Note: YOUR-ACCESSKEYID, YOUR-SECRETACCESSKEY and my-bucketname are
-   // dummy values, please replace them with original values.
+	// Note: YOUR-ACCESSKEYID, YOUR-SECRETACCESSKEY and my-bucketname are
+	// dummy values, please replace them with original values.
 
-	 // API requests are secure (HTTPS) if secure=true and insecure (HTTP) otherwise.
-   // New returns an MinIO Admin client object.
-   madmClnt, err := madmin.New("localhost:9000", "minio", "minio123", false)
-   if err != nil {
-	   log.Fatalln(err)
-   }
+ 	// API requests are secure (HTTPS) if secure=true and insecure (HTTP) otherwise.
+	// New returns an MinIO Admin client object.
+	madmClnt, err := madmin.New("localhost:9000", "minio", "minio123", false)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-	 lambdaInfo, err := madmClnt.ServerLoggingInfo()
-   if err != nil {
-	   log.Fatalln(err)
-   }
-   log.Println(lambdaInfo)
+ 	lambdaInfo, err := madmClnt.ServerLambdaInfo()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	log.Println(lambdaInfo)
 }

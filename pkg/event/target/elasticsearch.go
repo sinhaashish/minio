@@ -77,6 +77,20 @@ func (target *ElasticsearchTarget) ID() event.TargetID {
 	return target.id
 }
 
+// IsActive - Return true if target is up and active
+func (target *ElasticsearchTarget) IsActive() (bool, error) {
+	if dErr := target.args.URL.DialHTTP(); dErr != nil {
+		if urlErr, ok := dErr.(*url.Error); ok {
+			// To treat "connection refused" errors as errNotConnected.
+			if IsConnRefusedErr(urlErr.Err) {
+				return false, errNotConnected
+			}
+		}
+		return false, dErr
+	}
+	return true, nil
+}
+
 // Save - saves the events to the store if queuestore is configured, which will be replayed when the elasticsearch connection is active.
 func (target *ElasticsearchTarget) Save(eventData event.Event) error {
 	if target.store != nil {

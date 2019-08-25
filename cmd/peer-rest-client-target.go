@@ -31,6 +31,19 @@ func (target *PeerRESTClientTarget) ID() event.TargetID {
 	return target.id
 }
 
+// IsActive - Return true if target is up and active
+func (target *PeerRESTClientTarget) IsActive() (bool, error) {
+	// ch, err := target.channel()
+	// if err != nil {
+	// 	return false, err
+	// }
+	// defer func() {
+	// 	cErr := ch.Close()
+	// 	logger.LogOnceIf(context.Background(), cErr, target.ID())
+	// }()
+	return true, nil
+}
+
 // Save - Sends event directly without persisting.
 func (target *PeerRESTClientTarget) Save(eventData event.Event) error {
 	return target.send(eventData)

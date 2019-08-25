@@ -19,7 +19,6 @@ package target
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"net"
 	"net/url"
 	"os"
@@ -29,6 +28,7 @@ import (
 	"github.com/minio/minio/cmd/logger"
 	"github.com/minio/minio/pkg/event"
 	xnet "github.com/minio/minio/pkg/net"
+	"github.com/pkg/errors"
 	"github.com/streadway/amqp"
 )
 
@@ -82,6 +82,19 @@ type AMQPTarget struct {
 // ID - returns TargetID.
 func (target *AMQPTarget) ID() event.TargetID {
 	return target.id
+}
+
+// IsActive - Return true if target is up and active
+func (target *AMQPTarget) IsActive() (bool, error) {
+	ch, err := target.channel()
+	if err != nil {
+		return false, err
+	}
+	defer func() {
+		cErr := ch.Close()
+		logger.LogOnceIf(context.Background(), cErr, target.ID())
+	}()
+	return true, nil
 }
 
 func (target *AMQPTarget) channel() (*amqp.Channel, error) {
